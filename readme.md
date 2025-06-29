@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/motis-fptf-client.svg)](https://www.npmjs.com/package/@motis-project/motis-fptf-client)
 ![ISC-licensed](https://img.shields.io/github/license/motis-project/motis-fptf-client.svg)
 
-The following [FPTF](https://github.com/public-transport/friendly-public-transport-format)/[hafas-client](https://github.com/public-transport/hafas-client/) endpoints are supported (depending on the chosen profile, see below):
+This is an early version. The following [FPTF](https://github.com/public-transport/friendly-public-transport-format)/[hafas-client](https://github.com/public-transport/hafas-client/) endpoints are supported:
 
 * `journeys()`
 * `locations()`,

@@ -1,7 +1,7 @@
 import distance from 'gps-distance';
 
 const parseJourneyLeg = (ctx, pt, date) => { // pt = raw leg
-	const { profile, opt } = ctx;
+	const {profile, opt} = ctx;
 
 	const res = {
 		origin: profile.parseLocation(ctx, pt.from),
@@ -68,7 +68,7 @@ const parseJourneyLeg = (ctx, pt, date) => { // pt = raw leg
 
 	if (cancelledDep || cancelledArr || pt.cancelled || pt.canceled) {
 		res.cancelled = true;
-		Object.defineProperty(res, 'canceled', { value: true });
+		Object.defineProperty(res, 'canceled', {value: true});
 	}
 	return res;
 };

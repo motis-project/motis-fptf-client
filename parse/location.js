@@ -1,5 +1,4 @@
 const parseLocation = (ctx, l) => {
-	const {profile} = ctx;
 	const res = {
 		type: 'location',
 		latitude: l.lat,
@@ -11,7 +10,7 @@ const parseLocation = (ctx, l) => {
 			type: 'station',
 			id: l.id || l.stopId,
 			name: l.name,
-			location: res
+			location: res,
 		};
 	}
 	res.name = l.name;
@@ -22,7 +21,7 @@ const parseLocation = (ctx, l) => {
 		res.address = l.name; // TODO zip etc ?
 	}
 	return res;
-}
+};
 
 const enrichStation = (ctx, stop, locations) => {
 	// TODO

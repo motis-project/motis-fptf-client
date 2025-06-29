@@ -17,7 +17,8 @@ const testJourneysStationToStation = async (cfg) => {
 
 		const o = j.legs[0].origin;
 		const d = j.legs[j.legs.length - 1].destination;
-		/*t.ok(
+
+		/* t.ok(
 			fromIds.includes(o.id)
 			|| o.station && fromIds.includes(o.station.id),
 			`invalid ${n}.legs[0].origin`,

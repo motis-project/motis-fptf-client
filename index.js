@@ -1,5 +1,5 @@
 import distance from 'gps-distance';
-import {stoptimes, geocode, plan} from '@motis-project/motis-client';
+import {stoptimes, geocode, plan, oneToAll} from '@motis-project/motis-client';
 import {defaultProfile} from './lib/default-profile.js';
 import {validateProfile} from './lib/validate-profile.js';
 
@@ -173,7 +173,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 			to = opt._to;
 		}
 		if (opt._via) {
-			via = opt._via;
+			opt.via = opt._via;
 		}
 
 		opt = Object.assign({
@@ -228,7 +228,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 			query: req.query,
 		});
 		const ctx = {profile, opt, common, res};
-		
+
 		const journeys = res.data.itineraries
 			.map(j => profile.parseJourney(ctx, j));
 
@@ -245,9 +245,6 @@ const createClient = (profile, userAgent, opt = {}) => {
 	};
 
 	const refreshJourney = async (refreshToken, opt = {}) => {
-		throw new Error('Not implemented')
-		await applyEnrichedStationData({profile, common}, shouldLoadEnrichedStationData);
-
 		if ('string' !== typeof refreshToken || !refreshToken) {
 			throw new TypeError('refreshToken must be a non-empty string.');
 		}
@@ -300,16 +297,15 @@ const createClient = (profile, userAgent, opt = {}) => {
 			userAgent: userAgent,
 			query: req.query,
 		});
-		
+
 		const ctx = {profile, opt, common, res};
-		let results = res.data.slice(0, opt.results).map(res => profile.parseLocation(ctx, res));
+		let results = res.data.slice(0, opt.results)
+			.map(res => profile.parseLocation(ctx, res));
 
 		return results;
 	};
 
 	const stop = async (stop, opt = {}) => {
-		throw new Error('not implemented');
-
 		await applyEnrichedStationData({profile, common}, shouldLoadEnrichedStationData);
 
 		if (isObj(stop) && stop.id) {
@@ -365,8 +361,6 @@ const createClient = (profile, userAgent, opt = {}) => {
 	};
 
 	const trip = async (id, opt = {}) => {
-		throw new Error('not implemented');
-
 		await applyEnrichedStationData({profile, common}, shouldLoadEnrichedStationData);
 
 		if (!isNonEmptyString(id)) {
@@ -401,6 +395,76 @@ const createClient = (profile, userAgent, opt = {}) => {
 		throw new Error('not implemented');
 	};
 
+	const reachableFrom = async (address, opt = {}) => {
+		validateLocation(address, 'address');
+
+		opt = Object.assign({
+			when: Date.now(),
+			maxTransfers: 5, // maximum of 5 transfers
+			maxDuration: 20, // maximum travel duration in minutes, pass `null` for infinite
+			products: {},
+			subStops: true, // parse & expose sub-stops of stations?
+			entrances: true, // parse & expose entrances of stops/stations?
+			polylines: false, // return leg shapes?
+		}, opt);
+		if (opt.when !== undefined && opt.when !== null) {
+			opt.when = new Date(opt.when);
+			if (Number.isNaN(Number(opt.when))) {
+				throw new TypeError('opt.when is invalid');
+			}
+		}
+		const from = profile.formatLocation(profile, address, 'address');
+		const filters = profile.formatProductsFilter({profile}, opt.products || {}, 'motis');
+
+		const res = await oneToAll({
+			throwOnError: true,
+			baseUrl: profile.baseUrl,
+			userAgent: userAgent,
+			query: {
+				one: from,
+				via: opt.via
+					? [profile.formatLocation(profile, opt.via, 'opt.via')]
+					: undefined,
+				time: opt.when.toISOString(),
+				maxTravelTime: opt.maxDuration,
+				maxTransfers: opt.maxTransfers,
+				minTransferTime: opt.transferTime || undefined,
+				transitModes: filters,
+				requireBikeTransport: opt.bike,
+				// walkingSpeed
+				pedestrianProfile: opt.accessibility == 'none' ? 'FOOT' : 'WHEELCHAIR',
+			},
+		});
+
+		console.log(res.data);
+		if (!Array.isArray(res.data.all)) {
+			throw new Error('invalid response, expected all');
+		}
+
+		const ctx = {profile, opt, common};
+
+		const byDuration = [];
+		let i = 0, lastDuration = NaN;
+		res.data.all.sort((a, b) => a.duration - b.duration);
+		for (const pos of res.data.all) {
+			if (pos.duration !== lastDuration) {
+				lastDuration = pos.duration;
+				i = byDuration.length;
+				byDuration.push({
+					duration: pos.duration,
+					stations: [profile.parseLocation(ctx, pos.place)],
+				});
+			} else {
+				byDuration[i].stations.push(profile.parseLocation(ctx, pos.place));
+			}
+		}
+
+		return {
+			reachable: byDuration,
+			realtimeDataUpdatedAt: null,
+		};
+	};
+
 	const client = {
 		departures,
 		arrivals,
@@ -417,6 +481,9 @@ const createClient = (profile, userAgent, opt = {}) => {
 	}
 	if (profile.tripsByName) {
 		client.tripsByName = tripsByName;
+	}
+	if (profile.reachableFrom) {
+		client.reachableFrom = reachableFrom;
 	}
 	Object.defineProperty(client, 'profile', {value: profile});
 	return client;

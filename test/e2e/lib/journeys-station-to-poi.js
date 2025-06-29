@@ -16,7 +16,8 @@ const testJourneysStationToPoi = async (cfg) => {
 
 		let o = j.legs[0].origin;
 		const oN = 'res.journeys[0].legs[0].destination';
-		/*t.ok(
+
+		/* t.ok(
 			fromIds.includes(o.id)
 			|| o.station && fromIds.includes(o.station.id),
 			`invalid ${oN}.legs[0].origin`,
@@ -30,8 +31,8 @@ const testJourneysStationToPoi = async (cfg) => {
 		}
 
 		t.equal(d.type, 'location', dN + '.type is invalid');
-		//t.equal(d.id, id, dN + '.id is invalid'); TODO
-		//t.equal(d.name, name, dN + '.name is invalid'); TODO
+		// t.equal(d.id, id, dN + '.id is invalid'); TODO
+		// t.equal(d.name, name, dN + '.name is invalid'); TODO
 		t.ok(isRoughlyEqual(0.0001, d.latitude, latitude), dN + '.latitude is invalid');
 		t.ok(isRoughlyEqual(0.0001, d.longitude, longitude), dN + '.longitude is invalid');
 	}

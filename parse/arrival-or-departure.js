@@ -8,7 +8,7 @@ const createParseArrOrDep = (prefix) => {
 
 	const parseArrOrDep = (ctx, d) => { // d = raw arrival/departure
 
-		
+
 		const {profile, opt} = ctx;
 		const cancelled = profile.parseCancelled(d);
 		const res = {

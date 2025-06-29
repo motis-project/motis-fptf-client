@@ -1,6 +1,6 @@
 
 const formatLocationsReq = (ctx, query) => {
-	const {profile, opt} = ctx;
+	const {opt} = ctx;
 
 	let type = undefined;
 	if (opt.stops && !opt.addresses && !opt.poi) {
@@ -17,7 +17,7 @@ const formatLocationsReq = (ctx, query) => {
 		query: {
 			text: query,
 			language: opt.language,
-			type: type
+			type: type,
 		},
 	};
 };

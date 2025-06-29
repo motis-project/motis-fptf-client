@@ -26,11 +26,11 @@ const modifyRoutes = (routes, hafas, config) => {
 				req.query.via = '00';
 			}
 			r_func(req, res, next);
-		}
+		};
 		Object.assign(routes[r], r_func);
 	}
-	return routes
-}
+	return routes;
+};
 
 const mapRouteParsersWithIdAdapter = (route, parsers) => {
 	return {
@@ -51,8 +51,8 @@ const mapRouteParsersWithIdAdapter = (route, parsers) => {
 			type: 'string',
 			parse: parseString,
 		},
-	}
-}
+	};
+};
 
 const config = {
 	hostname: process.env.HOSTNAME || 'localhost',

@@ -1,24 +1,25 @@
 import tap from 'tap';
 import isRoughlyEqual from 'is-roughly-equal';
 
-import { createWhen } from './lib/util.js';
-import { createClient } from '../../index.js';
-import { profile as tProfile } from '../../p/transitous/index.js';
+import {createWhen} from './lib/util.js';
+import {createClient} from '../../index.js';
+import {profile as tProfile} from '../../p/transitous/index.js';
 import {
 	createValidateStation,
 	createValidateTrip,
 } from './lib/validators.js';
-import { createValidateFptfWith as createValidate } from './lib/validate-fptf-with.js';
-import { testJourneysStationToStation } from './lib/journeys-station-to-station.js';
-import { testJourneysStationToAddress } from './lib/journeys-station-to-address.js';
-import { testJourneysStationToPoi } from './lib/journeys-station-to-poi.js';
-import { testEarlierLaterJourneys } from './lib/earlier-later-journeys.js';
-import { testLegCycleAlternatives } from './lib/leg-cycle-alternatives.js';
-import { testRefreshJourney } from './lib/refresh-journey.js';
-import { journeysFailsWithNoProduct } from './lib/journeys-fails-with-no-product.js';
-import { testDepartures } from './lib/departures.js';
-import { testArrivals } from './lib/arrivals.js';
-import { testJourneysWithDetour } from './lib/journeys-with-detour.js';
+import {createValidateFptfWith as createValidate} from './lib/validate-fptf-with.js';
+import {testJourneysStationToStation} from './lib/journeys-station-to-station.js';
+import {testJourneysStationToAddress} from './lib/journeys-station-to-address.js';
+import {testJourneysStationToPoi} from './lib/journeys-station-to-poi.js';
+import {testEarlierLaterJourneys} from './lib/earlier-later-journeys.js';
+import {testLegCycleAlternatives} from './lib/leg-cycle-alternatives.js';
+import {testRefreshJourney} from './lib/refresh-journey.js';
+import {journeysFailsWithNoProduct} from './lib/journeys-fails-with-no-product.js';
+import {testDepartures} from './lib/departures.js';
+import {testArrivals} from './lib/arrivals.js';
+import {testJourneysWithDetour} from './lib/journeys-with-detour.js';
+import {testReachableFrom} from './lib/reachable-from.js';
 
 const isObj = o => o !== null && 'object' === typeof o && !Array.isArray(o);
 const minute = 60 * 1000;
@@ -82,7 +83,7 @@ const assertValidTickets = (test, tickets) => {
 	}
 };
 
-const client = createClient(tProfile, 'public-transport/hafas-client:test', { enrichStations: true });
+const client = createClient(tProfile, 'public-transport/hafas-client:test', {enrichStations: true});
 
 const berlinHbf = 'de-DELFI_de:11000:900003200:1:50';
 const münchenHbf = 'de-DELFI_de:09162:100';
@@ -263,7 +264,7 @@ if (!process.env.VCR_MODE) {
 tap.skip('refreshJourney', async (t) => {
 	const T_MOCK = 1710831600 * 1000; // 2024-03-19T08:00:00+01:00
 	const when = createWhen(tProfile.timezone, tProfile.locale, T_MOCK);
-	const validate = createValidate({ ...cfg, when });
+	const validate = createValidate({...cfg, when});
 
 	await testRefreshJourney({
 		test: t,
@@ -276,7 +277,6 @@ tap.skip('refreshJourney', async (t) => {
 	});
 	t.end();
 });
-
 
 
 tap.skip('journeysFromTrip – U Mehringdamm to U Naturkundemuseum, reroute to Spittelmarkt.', async (t) => {
@@ -303,10 +303,10 @@ tap.skip('journeysFromTrip – U Mehringdamm to U Naturkundemuseum, reroute to S
 	// `journeysFromTrip` only supports queries *right now*, so we can't use `when` as in all
 	// other tests. To make the test less brittle, we pick a connection that is served all night. 🙄
 	const when = new Date();
-	const validate = createValidate({ ...cfg, when });
+	const validate = createValidate({...cfg, when});
 
 	const findTripBetween = async (stopAId, stopBId, products = {}) => {
-		const { journeys } = await client.journeys(stopAId, stopBId, {
+		const {journeys} = await client.journeys(stopAId, stopBId, {
 			departure: new Date(when - 10 * minute),
 			transfers: 0, products,
 			results: 8, stopovers: false, remarks: false,
@@ -323,22 +323,22 @@ tap.skip('journeysFromTrip – U Mehringdamm to U Naturkundemuseum, reroute to S
 			const pastStopovers = t.stopovers
 				.filter(st => departureOf(st) < Date.now()); // todo: <= ?
 			const hasStoppedAtA = pastStopovers
-				.find(sameStopOrStation({ id: stopAId }));
+				.find(sameStopOrStation({id: stopAId}));
 			const willStopAtB = t.stopovers
 				.filter(st => arrivalOf(st) > Date.now()) // todo: >= ?
-				.find(sameStopOrStation({ id: stopBId }));
+				.find(sameStopOrStation({id: stopBId}));
 
 			if (hasStoppedAtA && willStopAtB) {
-				const prevStopover = maxBy(pastStopovers, departureOf);
-				return { trip: t, prevStopover };
+				const prevStopover = pastStopovers.reduce((a, b) => (departureOf(a) > departureOf(b) ? a : b));
+				return {trip: t, prevStopover};
 			}
 		}
-		return { trip: null, prevStopover: null };
+		return {trip: null, prevStopover: null};
 	};
 
 	// Find a vehicle from U Mehringdamm to U Stadtmitte (to the north) that is currently
 	// between these two stations.
-	const { trip, prevStopover } = await findTripBetween(blnMehringdamm, blnStadtmitte, {
+	const {trip, prevStopover} = await findTripBetween(blnMehringdamm, blnStadtmitte, {
 		regionalExpress: false, regional: false, suburban: false,
 	});
 	t.ok(trip, 'precondition failed: trip not found');
@@ -352,7 +352,7 @@ tap.skip('journeysFromTrip – U Mehringdamm to U Naturkundemuseum, reroute to S
 	// Validate with fake prices.
 	const withFakePrice = (j) => {
 		const clone = Object.assign({}, j);
-		clone.price = { amount: 123, currency: 'EUR' };
+		clone.price = {amount: 123, currency: 'EUR'};
 		return clone;
 	};
 	// todo: there is no such validator!
@@ -364,7 +364,7 @@ tap.skip('journeysFromTrip – U Mehringdamm to U Naturkundemuseum, reroute to S
 
 		const legOnTrip = j.legs.find(l => l.tripId === trip.id);
 		t.ok(legOnTrip, n + ': leg with trip ID not found');
-		t.equal(last(legOnTrip.stopovers).stop.id, blnStadtmitte);
+		t.equal(legOnTrip.stopovers[legOnTrip.stopovers.length - 1].stop.id, blnStadtmitte);
 	}
 });
 
@@ -377,7 +377,7 @@ tap.skip('trip details', async (t) => {
 	t.ok(p.tripId, 'precondition failed');
 	t.ok(p.line.name, 'precondition failed');
 
-	const tripRes = await client.trip(p.tripId, { when });
+	const tripRes = await client.trip(p.tripId, {when});
 
 	const validate = createValidate(cfg, {
 		trip: (cfg) => {
@@ -420,7 +420,7 @@ tap.test('departures with station object', async (t) => {
 			latitude: 1.23,
 			longitude: 2.34,
 		},
-	}, { when });
+	}, {when});
 
 	validate(t, res, 'departuresResponse', 'res');
 	t.end();
@@ -498,3 +498,22 @@ tap.test('line with additionalName', async (t) => {
 	t.end();
 });
 */
+
+tap.test('reachableFrom', {timeout: 20 * 1000}, async (t) => {
+	const torfstr17 = {
+		type: 'location',
+		address: 'Torfstraße 17',
+		latitude: 52.5416823,
+		longitude: 13.3491223,
+	};
+
+	await testReachableFrom({
+		test: t,
+		reachableFrom: client.reachableFrom,
+		address: torfstr17,
+		when,
+		maxDuration: 15,
+		validate,
+	});
+	t.end();
+});

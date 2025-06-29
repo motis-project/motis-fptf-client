@@ -2,7 +2,9 @@ import slugg from 'slugg';
 
 const parseLine = (ctx, p) => {
 	const profile = ctx.profile;
-	const fahrtNr = p.tripId.split('_').slice(2).join('_');
+	const fahrtNr = p.tripId.split('_')
+		.slice(2)
+		.join('_');
 	const res = {
 		type: 'line',
 		id: slugg(p.tripId),
@@ -11,7 +13,7 @@ const parseLine = (ctx, p) => {
 		public: true,
 	};
 
-	//res.adminCode = adminCode;
+	// res.adminCode = adminCode;
 	const foundProduct = profile.products.find(pp => pp.motis == p.mode || pp.motis_alt == p.mode);
 	res.mode = foundProduct?.mode;
 	res.product = foundProduct?.id;

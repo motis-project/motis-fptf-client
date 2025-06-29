@@ -6,7 +6,7 @@ const parseJourney = (ctx, j) => { // j = raw journey
 	// TODO direct
 	for (const l of j.legs) {
 		const leg = profile.parseJourneyLeg(ctx, l, null);
-		
+
 		legs.push(leg);
 	}
 

@@ -9,10 +9,10 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 		fromPlace: from,
 		toPlace: to,
 		via: opt.via
-				? [profile.formatLocation(profile, opt.via, 'opt.via')]
-				: undefined,
+			? [profile.formatLocation(profile, opt.via, 'opt.via')]
+			: undefined,
 		time: when.toISOString(),
-		maxTransfers: opt.transfers == -1 ? undefined: opt.transfers,
+		maxTransfers: opt.transfers == -1 ? undefined : opt.transfers,
 		minTransferTime: opt.transferTime || undefined,
 		detailedTransfers: false,
 		transitModes: filters,
@@ -21,7 +21,7 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 		arriveBy: !outFrwd,
 		requireBikeTransport: opt.bike,
 		// walkingSpeed
-		pedestrianProfile: opt.accessibility == 'none' ? 'FOOT' : 'WHEELCHAIR'
+		pedestrianProfile: opt.accessibility == 'none' ? 'FOOT' : 'WHEELCHAIR',
 	};
 	// TODO opt.notOnlyFastRoutes
 	return {

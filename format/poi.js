@@ -3,7 +3,7 @@ const formatPoi = (p) => {
 	if (p.type !== 'location' || !p.latitude || !p.longitude) {
 		throw new TypeError('invalid POI');
 	}
-	return p.latitude+','+p.longitude;
+	return p.latitude + ',' + p.longitude;
 };
 
 export {

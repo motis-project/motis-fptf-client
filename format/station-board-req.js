@@ -4,12 +4,12 @@ const formatStationBoardReq = (ctx, station, type) => {
 	return {
 		query: {
 			time: opt.when.toISOString(),
-			stopId: station, 
+			stopId: station,
 			mode: profile.formatProductsFilter(ctx, opt.products || {}),
 			n: opt.results || 10,
-			radius: opt.includeRelatedStations ? 500 : undefined, 
-			arriveBy: type == 'arrivals'
-		}
+			radius: opt.includeRelatedStations ? 500 : undefined,
+			arriveBy: type == 'arrivals',
+		},
 	};
 };
 

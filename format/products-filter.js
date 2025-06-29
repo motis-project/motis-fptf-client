@@ -27,8 +27,8 @@ const formatProductsFilter = (ctx, filter, key = 'motis') => {
 			throw new TypeError('unknown product ' + product);
 		}
 		products.push(byProduct[product][key]);
-		if (byProduct[product][key+'_alt']) {
-			products.push(byProduct[product][key+'_alt']);
+		if (byProduct[product][key + '_alt']) {
+			products.push(byProduct[product][key + '_alt']);
 		}
 	}
 	if (products.length === 0) {

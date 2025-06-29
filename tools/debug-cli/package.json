@@ -1,0 +1,14 @@
+{
+	"private": true,
+	"name": "debug-cli",
+	"version": "1.0.0",
+	"type": "module",
+	"bin": {
+		"motis-fptf-client-debug-cli": "./cli.js"
+	},
+	"author": "Jannis R <mail@jannisr.de>",
+	"license": "ISC",
+	"engines": {
+		"node": ">=16.17"
+	}
+}

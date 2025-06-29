@@ -1,0 +1,101 @@
+name: test
+
+on: [push, pull_request, workflow_call]
+
+env:
+  npm_config_cache: /tmp/npm-cache
+
+jobs:
+  lint-and-spellcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+      - name: "Use Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - run: npm install
+
+      - name: Run lint check
+        run: npm run lint
+
+      - name: Run spell check
+        run: npm run test-spelling
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
+          - 20.x
+          - 22.x
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: setup Node.js v${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - id: cache-npm
+      name: restore npm cache
+      uses: actions/cache@v4
+      with:
+        key: npm-cache-${{ github.ref_name }}-${{ matrix.node-version }}-unit-tests
+        path: ${{ env.npm_config_cache }}
+    - run: npm install
+
+    - run: npm run test-unit
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
+          - 20.x
+          - 22.x
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: setup Node.js v${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - id: cache-npm
+      name: restore npm cache
+      uses: actions/cache@v4
+      with:
+        key: npm-cache-${{ github.ref_name }}-${{ matrix.node-version }}-integration-tests
+        path: ${{ env.npm_config_cache }}
+    - run: npm install
+
+    - run: npm run test-integration
+
+  e2e-tests:
+    needs: [unit-tests, integration-tests]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: setup Node.js v${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - id: cache-npm
+      name: restore npm cache
+      uses: actions/cache@v4
+      with:
+        key: npm-cache-${{ github.ref_name }}-${{ matrix.node-version }}-e2e-tests
+        path: ${{ env.npm_config_cache }}
+    - run: npm install
+
+    - run: npm run test-e2e

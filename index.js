@@ -436,7 +436,6 @@ const createClient = (profile, userAgent, opt = {}) => {
 			},
 		});
 
-		console.log(res.data);
 		if (!Array.isArray(res.data.all)) {
 			throw new Error('invalid response, expected all');
 		}

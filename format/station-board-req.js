@@ -6,9 +6,10 @@ const formatStationBoardReq = (ctx, station, type) => {
 			time: opt.when.toISOString(),
 			stopId: station,
 			mode: profile.formatProductsFilter(ctx, opt.products || {}),
-			n: opt.results || 10,
+			n: opt.results || 250,
 			radius: opt.includeRelatedStations ? 500 : undefined,
 			arriveBy: type == 'arrivals',
+			direction: 'LATER',
 		},
 	};
 };

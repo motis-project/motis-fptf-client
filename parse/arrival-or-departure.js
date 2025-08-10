@@ -38,7 +38,6 @@ const createParseArrOrDep = (prefix) => {
 		if (opt.remarks) {
 			res.remarks = profile.parseRemarks(ctx, d, prefix == ARRIVAL);
 		}
-		console.log(res);
 
 		// TODO stopovers
 		return res;

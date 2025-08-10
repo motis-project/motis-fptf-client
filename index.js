@@ -92,7 +92,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 			direction: null, // only show departures stopping by this station
 			line: null, // filter by line ID
 			duration: 10, // show departures for the next n minutes
-			results: null, // max. number of results; `null` means "whatever HAFAS wants"
+			results: null, // max. number of results; `null` means "whatever MOTIS wants"
 			subStops: true, // parse & expose sub-stops of stations?
 			entrances: true, // parse & expose entrances of stops/stations?
 			linesOfStops: false, // parse & expose lines at the stop/station?
@@ -117,11 +117,18 @@ const createClient = (profile, userAgent, opt = {}) => {
 		});
 
 		const ctx = {profile, opt, common};
-		let results = res.data.stopTimes
-			.map(res => parse(ctx, res));
 
-		if (!opt.includeRelatedStations) {
-			results = results.filter(r => !r.stop?.id || r.stop.id == station);
+		let results = [];
+		const until = new Date(opt.when.getTime() + 60000 * opt.duration);
+		for (let r of res.data.stopTimes) {
+			const parsed = parse(ctx, r);
+			if (new Date(parsed.when) > until) {
+				break;
+			}
+			if (!opt.includeRelatedStations && r.stop?.id && r.stop.id != station) {
+				continue;
+			}
+			results.push(parsed);
 		}
 		if (opt.direction) {
 			results = results.filter(r => !r.nextStopovers || r.nextStopovers.find(s => s.stop?.id == opt.direction || s.stop?.name == opt.direction));
@@ -177,7 +184,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		}
 
 		opt = Object.assign({
-			results: null, // number of journeys – `null` means "whatever HAFAS returns"
+			results: null, // number of journeys – `null` means "whatever MOTIS returns"
 			via: null, // let journeys pass this station?
 			stopovers: false, // return stations on the way?
 			transfers: null, // maximum nr of transfers
@@ -229,7 +236,10 @@ const createClient = (profile, userAgent, opt = {}) => {
 		});
 		const ctx = {profile, opt, common, res};
 
-		const journeys = res.data.itineraries
+		const rawJourneys = Number.isInteger(opt.results)
+			? res.data.itineraries.slice(0, opt.results)
+			: res.data.itineraries;
+		const journeys = rawJourneys
 			.map(j => profile.parseJourney(ctx, j));
 
 		if (opt.bestprice) {

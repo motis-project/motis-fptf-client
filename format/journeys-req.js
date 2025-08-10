@@ -15,7 +15,7 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 		maxTransfers: opt.transfers == -1 ? undefined : opt.transfers,
 		minTransferTime: opt.transferTime || undefined,
 		detailedTransfers: false,
-		transitModes: filters,
+		transitModes: filters.join(','),
 		numItineraries: opt.results,
 		pageCursor: journeysRef,
 		arriveBy: !outFrwd,

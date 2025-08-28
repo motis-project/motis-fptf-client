@@ -65,7 +65,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.21.0",
-		"@motis-project/motis-client": "2.0.83",
+		"@motis-project/motis-client": "^2.1.2",
 		"@pollyjs/adapter-node-http": "^6.0.6",
 		"@pollyjs/core": "^6.0.6",
 		"@pollyjs/persister-fs": "^6.0.6",

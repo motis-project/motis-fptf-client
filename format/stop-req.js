@@ -1,6 +1,11 @@
 
 const formatStopReq = (ctx, stopRef) => {
-	throw new Error('NotImplemented');
+	return {
+		query: {
+			stopId: stopRef,
+			n: 0,
+		},
+	};
 };
 
 export {

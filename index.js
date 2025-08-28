@@ -333,9 +333,15 @@ const createClient = (profile, userAgent, opt = {}) => {
 
 		const req = profile.formatStopReq({profile, opt}, stop);
 
-		const {res} = await profile.request({profile, opt}, userAgent, req);
-		const ctx = {profile, opt, res, common};
-		return profile.parseStop(ctx, res, stop);
+		const {data: {place}} = await stoptimes({
+			throwOnError: true,
+			baseUrl: profile.baseUrl,
+			userAgent: userAgent,
+			query: req.query,
+		});
+
+		const ctx = {profile, opt, res: place, common};
+		return profile.parseLocation(ctx, place, stop);
 	};
 
 	const nearby = async (location, opt = {}) => {

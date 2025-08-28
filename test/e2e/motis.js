@@ -92,7 +92,7 @@ const blnSchwedterStr = 'de-DELFI_de:11000:900110505::3';
 const westhafen = 'de-VBB_de:11000:900001201:1:51';
 const wedding = 'de-VBB_de:11000:900009104:1:51';
 const württembergallee = 'de-DELFI_de:11000:900026153::1';
-const regensburgHbf = '8000309';
+const regensburgHbf = 'de-DELFI_de:09362:11090';
 const blnOstbahnhof = '8010255';
 const blnTiergarten = '8089091';
 const blnJannowitzbrücke = '8089019';
@@ -478,7 +478,6 @@ tap.test('locations named Jungfernheide', async (t) => {
 	t.end();
 });
 
-/*
 tap.test('stop', async (t) => {
 	const s = await client.stop(regensburgHbf);
 
@@ -488,6 +487,7 @@ tap.test('stop', async (t) => {
 	t.end();
 });
 
+/*
 tap.test('line with additionalName', async (t) => {
 	const {departures} = await client.departures(potsdamHbf, {
 		when,

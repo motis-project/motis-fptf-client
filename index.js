@@ -320,6 +320,8 @@ const createClient = (profile, userAgent, opt = {}) => {
 
 		if (isObj(stop) && stop.id) {
 			stop = stop.id;
+		} else if (opt._id) {
+			stop = opt._id;
 		} else if ('string' !== typeof stop) {
 			throw new TypeError('stop must be an object or a string.');
 		}

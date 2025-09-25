@@ -11,13 +11,14 @@ This is an early version. The following [FPTF](https://github.com/public-transpo
 * `locations()`,
 * `departures()`, `arrivals()` boards
 * `reachableFrom()`
+* `stop()`
 
 What doesn't work (yet):
 
 * `refreshJourney()`
 * `nearby()`
 * `trip()`
-* all other endpoints (`tripsByName()`, `radar()`, `journeysFromTrip()`, `remarks()`, `lines()`, `station()`, `stop()`)
+* all other endpoints (`tripsByName()`, `radar()`, `journeysFromTrip()`, `remarks()`, `lines()`, `station()`)
 
 By default, a [transitous](https://transitous.org) profile is included, but you can use it with any other MOTIS instance.
 

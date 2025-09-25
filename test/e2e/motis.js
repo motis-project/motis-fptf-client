@@ -24,7 +24,8 @@ import {testReachableFrom} from './lib/reachable-from.js';
 const isObj = o => o !== null && 'object' === typeof o && !Array.isArray(o);
 const minute = 60 * 1000;
 
-const T_MOCK = new Date().getTime(); 
+const T_MOCK = new Date()
+	.getTime();
 const when = createWhen(tProfile.timezone, tProfile.locale, T_MOCK);
 
 const cfg = {

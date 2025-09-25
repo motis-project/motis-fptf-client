@@ -53,6 +53,7 @@
 	},
 	"dependencies": {
 		"@mapbox/polyline": "^1.2.1",
+		"@motis-project/motis-client": "^2.1.2",
 		"content-type": "^1.0.5",
 		"cross-fetch": "^4.1.0",
 		"db-hafas-stations": "2.0.0",
@@ -65,7 +66,6 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.21.0",
-		"@motis-project/motis-client": "^2.1.2",
 		"@pollyjs/adapter-node-http": "^6.0.6",
 		"@pollyjs/core": "^6.0.6",
 		"@pollyjs/persister-fs": "^6.0.6",

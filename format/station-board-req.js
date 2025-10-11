@@ -7,7 +7,7 @@ const formatStationBoardReq = (ctx, station, type) => {
 			stopId: station,
 			mode: profile.formatProductsFilter(ctx, opt.products || {}),
 			n: opt.results || 250,
-			radius: opt.includeRelatedStations ? 500 : undefined,
+			radius: opt.includeRelatedStations ? 300 : undefined,
 			arriveBy: type == 'arrivals',
 			direction: 'LATER',
 		},

@@ -6,12 +6,13 @@ const parseLocation = (ctx, l) => {
 		id: l.id || l.stopId,
 	};
 	if (l.type == 'STOP' || l.stopId) {
-		return {
+		let s = {
 			type: 'station',
 			id: l.id || l.stopId,
 			name: l.name,
 			location: res,
 		};
+		return ctx.profile.enrichStation(ctx, s);
 	}
 	res.name = l.name;
 	if (l.type == 'PLACE') {
@@ -24,25 +25,21 @@ const parseLocation = (ctx, l) => {
 };
 
 const enrichStation = (ctx, stop, locations) => {
-	// TODO
 	const {common} = ctx;
 	const locs = locations || common?.locations;
-	const rich = locs && (locs[stop.id] || locs[stop.name]);
+	const ifopt = ((stop.id + '_').split('_')[1] + '::').split(':')
+		.slice(0, 3)
+		.join(':');
+	console.log(ifopt, Object.keys(locs)[0]);
+	let rich = locs && locs[ifopt];
 	if (rich) {
-		delete stop.type;
-		delete stop.id;
-		stop = {
-			...rich,
-			...stop,
-		};
-		delete stop.lines;
-		delete stop.facilities;
-		delete stop.reisezentrumOpeningHours;
-		if (stop.station) {
-			stop.station = {...stop.station};
-			delete stop.station.lines;
-			delete stop.station.facilities;
-			delete stop.station.reisezentrumOpeningHours;
+		stop.type = 'stop';
+		stop.station = {...(rich.station || rich)};
+		delete stop.station.lines;
+		delete stop.station.facilities;
+		delete stop.station.reisezentrumOpeningHours;
+		if (stop.station.station) {
+			delete stop.station.station;
 		}
 	}
 	return stop;

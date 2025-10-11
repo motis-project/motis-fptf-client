@@ -1,5 +1,6 @@
 import {createClient} from './index.js';
 import {profile as transitousProfile} from './p/transitous/index.js';
+import {profile as compatProfile} from './p/compat/index.js';
 import {mapRouteParsers} from './lib/api-parsers.js';
 import {createHafasRestApi as createApi} from 'hafas-rest-api';
 import {parseString} from 'hafas-rest-api/lib/parse.js';
@@ -74,6 +75,7 @@ const config = {
 
 const profiles = {
 	transitous: transitousProfile,
+	compat: compatProfile,
 };
 
 const start = async () => {

@@ -31,8 +31,7 @@ const loadEnrichedStationData = async (profile) => {
 	const dbHafasStations = await import('db-hafas-stations');
 	const items = {};
 	for await (const station of dbHafasStations.readFullStations()) {
-		items[station.id] = station;
-		items[station.name] = station;
+		items[station.ifoptId || station.station?.ifoptId] = station;
 	}
 	if (profile.DEBUG) {
 		console.log('Loaded station index.');

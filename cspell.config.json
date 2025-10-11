@@ -640,7 +640,8 @@
     "polyline",
     "headsign",
     "stoptimes",
-    "mapbox"
+    "mapbox",
+    "ifopt"
   ],
   "ignorePaths": [
     "docs/dumps/**",

@@ -17,7 +17,7 @@ const parseLine = (ctx, p) => {
 	const foundProduct = profile.products.find(pp => pp.motis == p.mode || pp.motis_alt == p.mode);
 	res.mode = foundProduct?.mode;
 	res.product = foundProduct?.id;
-	res.productName = p.routeShortName.replace(/\d/g, '') || foundProduct?.name;
+	res.productName = (p.routeShortName.replace(/[\d()]+/g, '') + ' ').split(' ')[0] || foundProduct?.name;
 
 	res.operator = profile.parseOperator(ctx, p);
 	return res;

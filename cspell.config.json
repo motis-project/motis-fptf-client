@@ -641,7 +641,9 @@
     "headsign",
     "stoptimes",
     "mapbox",
-    "ifopt"
+    "ifopt",
+    "GTFS",
+    "substops"
   ],
   "ignorePaths": [
     "docs/dumps/**",

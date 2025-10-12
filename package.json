@@ -1,7 +1,7 @@
 {
 	"name": "@motis-project/motis-fptf-client",
 	"description": "Exposing the MOTIS API as a Friendly Public Transport Format API.",
-	"version": "6.3.0",
+	"version": "6.3.1",
 	"type": "module",
 	"main": "index.js",
 	"files": [

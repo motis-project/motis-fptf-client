@@ -30,7 +30,6 @@ const enrichStation = (ctx, stop, locations) => {
 	const ifopt = ((stop.id + '_').split('_')[1] + '::').split(':')
 		.slice(0, 3)
 		.join(':');
-	console.log(ifopt, Object.keys(locs)[0]);
 	let rich = locs && locs[ifopt];
 	if (rich) {
 		stop.type = 'stop';

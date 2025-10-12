@@ -5,6 +5,9 @@
 [![npm version](https://img.shields.io/npm/v/@motis-project/motis-fptf-client.svg)](https://www.npmjs.com/package/@motis-project/motis-fptf-client)
 ![ISC-licensed](https://img.shields.io/github/license/motis-project/motis-fptf-client.svg)
 
+
+This project exists to ease transitioning from HAFAS-based APIs to open APIs run with open schedule/RT data. It uses [motis-client](https://www.npmjs.com/package/@motis-project/motis-client) to access the MOTIS API, use that if you want to access the full capabilities and features of MOTIS, use motis-fptf-client only when you want to replace/run in parallel with [hafas-client](https://github.com/public-transport/hafas-client/) and/or [db-vendo-client](https://github.com/public-transport/db-vendo-client/).
+
 This is an early version. The following [FPTF](https://github.com/public-transport/friendly-public-transport-format)/[hafas-client](https://github.com/public-transport/hafas-client/) endpoints are supported:
 
 * `journeys()`
@@ -20,12 +23,7 @@ What doesn't work (yet):
 * `trip()`
 * all other endpoints (`tripsByName()`, `radar()`, `journeysFromTrip()`, `remarks()`, `lines()`, `station()`)
 
-By default, a [transitous](https://transitous.org) profile is included, but you can use it with any other MOTIS instance.
-
-
-## Background
-
-This project exists to ease transitioning from HAFAS-based APIs to open APIs run with open schedule/RT data. It uses [motis-client](https://www.npmjs.com/package/@motis-project/motis-client) to access the MOTIS API, use that if you want to access the full capabilities and features of MOTIS, use motis-fptf-client only when you want to replace/run in parallel with [hafas-client](https://github.com/public-transport/hafas-client/) and/or [db-vendo-client](https://github.com/public-transport/db-vendo-client/).
+By default, a [transitous](https://transitous.org) profile is included, but you can use it with any other MOTIS instance by setting the `MOTIS_BASE_URL` environment variable or modifying the profile. There is also a `compat` profile which will try to merge stops (which are often platforms in GTFS) to stations similar to the stations known from `db-vendo-client`/`hafas-client`. Other related platforms/substops (currently, those with the same name in a radius of 200m) will be merged into the first encountered stop id. In addition, just as the `transitous` profile, when `enrichStations` is enabled (default), the `station` attribute of stops will contain the matching station data from [db-hafas-stations](https://github.com/derhuerst/db-hafas-stations) including the EVA number as id, if available. This enables matching to other DB data.
 
 ## Usage
 
@@ -40,6 +38,8 @@ See an example in [api.js](api.js). It shows how you can use `motis-fptf-client`
 ```
 docker run \
     -e USER_AGENT=my-awesome-program \
+    -e MOTIS_PROFILE=transitous \
+    -e MOTIS_BASE_URL=https://api.transitous.org \
     -p 3000:3000 \
     ghcr.io/public-transport/motis-fptf-client
 ```
@@ -52,6 +52,7 @@ There are [community-maintained TypeScript typings available as `@types/hafas-cl
 
 ## Related Projects
 
+- [motis-client](https://www.npmjs.com/package/@motis-project/motis-client) – the full fledged MOTIS API as a JS/TS client
 - [hafas-client](https://github.com/public-transport/hafas-client/) – including further related projects
 - [db-vendo-client](https://github.com/public-transport/db-vendo-client/) - drop-in replacement to leverage the new DB APIs
 - [hafas-rest-api](https://github.com/public-transport/hafas-rest-api/) – expose a hafas-client or motis-fptf-client instance as a REST API

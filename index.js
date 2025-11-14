@@ -64,6 +64,9 @@ const createClient = (profile, userAgent, opt = {}) => {
 	if (FORBIDDEN_USER_AGENTS.includes(userAgent.toLowerCase())) {
 		throw new TypeError(`userAgent should tell the API operators how to contact you. If you have copied "${userAgent}" value from the documentation, please adapt it.`);
 	}
+	const headers = {
+		'User-Agent': userAgent,
+	};
 
 	const _stationBoard = async (station, type, resultsField, parse, opt = {}) => {
 		await applyEnrichedStationData({profile, common}, shouldLoadEnrichedStationData);
@@ -111,7 +114,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		const res = await stoptimes({
 			throwOnError: true,
 			baseUrl: profile.baseUrl,
-			userAgent: userAgent,
+			headers,
 			query: req.query,
 		});
 
@@ -230,7 +233,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		const res = await plan({
 			throwOnError: true,
 			baseUrl: profile.baseUrl,
-			userAgent: userAgent,
+			headers,
 			query: req.query,
 		});
 		const ctx = {profile, opt, common, res};
@@ -303,7 +306,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		const res = await geocode({
 			throwOnError: true,
 			baseUrl: profile.baseUrl,
-			userAgent: userAgent,
+			headers,
 			query: req.query,
 		});
 
@@ -337,7 +340,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		const {data: {place}} = await stoptimes({
 			throwOnError: true,
 			baseUrl: profile.baseUrl,
-			userAgent: userAgent,
+			headers,
 			query: req.query,
 		});
 
@@ -436,7 +439,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		const res = await oneToAll({
 			throwOnError: true,
 			baseUrl: profile.baseUrl,
-			userAgent: userAgent,
+			headers,
 			query: {
 				one: from,
 				via: opt.via

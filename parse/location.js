@@ -19,7 +19,7 @@ const parseLocation = (ctx, l) => {
 				id: l.parentId,
 				name: l.name,
 				location: res,
-			}
+			};
 		}
 		return ctx.profile.enrichStation(ctx, s);
 	}

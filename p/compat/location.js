@@ -1,4 +1,4 @@
-import { enrichStation as basicEnrichStation } from '../../parse/location.js';
+import {enrichStation as basicEnrichStation} from '../../parse/location.js';
 
 
 const enrichStation = (ctx, stop, locations) => {

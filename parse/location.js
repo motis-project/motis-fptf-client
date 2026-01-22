@@ -12,6 +12,15 @@ const parseLocation = (ctx, l) => {
 			name: l.name,
 			location: res,
 		};
+		if (l.parentId) {
+			s.type = 'stop';
+			s.station = {
+				type: 'station',
+				id: l.parentId,
+				name: l.name,
+				location: res,
+			}
+		}
 		return ctx.profile.enrichStation(ctx, s);
 	}
 	res.name = l.name;

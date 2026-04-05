@@ -643,7 +643,9 @@
     "mapbox",
     "ifopt",
     "GTFS",
-    "substops"
+    "substops",
+    "bbox",
+    "antimeridian"
   ],
   "ignorePaths": [
     "docs/dumps/**",

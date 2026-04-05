@@ -429,7 +429,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 		}
 		// With a bounding box across the antimeridian, east (e.g. -175) might be smaller than west (e.g. 175).
 		// Likewise, across the north/south poles, north (e.g. -85) might be smaller than south (e.g. 85).
-		// In these cases, the terms north/south & east/west become rather arbitrary of couse.
+		// In these cases, the terms north/south & east/west become rather arbitrary of course.
 		// see also https://antimeridian.readthedocs.io/en/stable/
 		// todo: how does HAFAS handle this?
 		if (north === south) {
@@ -466,9 +466,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 
 		return {
 			movements,
-			realtimeDataUpdatedAt: res.planrtTS && res.planrtTS !== '0'
-				? parseInt(res.planrtTS)
-				: null,
+			realtimeDataUpdatedAt: null,
 		};
 	};
 
@@ -558,9 +556,9 @@ const createClient = (profile, userAgent, opt = {}) => {
 	if (profile.tripsByName) {
 		client.tripsByName = tripsByName;
 	}
-	if (profile.radar) {
+	/*if (profile.radar) {
 		client.radar = radar;
-	}
+	}*/
 	if (profile.reachableFrom) {
 		client.reachableFrom = reachableFrom;
 	}

@@ -53,7 +53,7 @@
 	},
 	"dependencies": {
 		"@mapbox/polyline": "^1.2.1",
-		"@motis-project/motis-client": "^2.1.2",
+		"@motis-project/motis-client": "^2.9.0",
 		"content-type": "^1.0.5",
 		"cross-fetch": "^4.1.0",
 		"db-hafas-stations": "2.0.0",

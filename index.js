@@ -414,62 +414,6 @@ const createClient = (profile, userAgent, opt = {}) => {
 		throw new Error('not implemented');
 	};
 
-	const radar = async ({north, west, south, east}, opt) => {
-		if ('number' !== typeof north) {
-			throw new TypeError('north must be a number.');
-		}
-		if ('number' !== typeof west) {
-			throw new TypeError('west must be a number.');
-		}
-		if ('number' !== typeof south) {
-			throw new TypeError('south must be a number.');
-		}
-		if ('number' !== typeof east) {
-			throw new TypeError('east must be a number.');
-		}
-		// With a bounding box across the antimeridian, east (e.g. -175) might be smaller than west (e.g. 175).
-		// Likewise, across the north/south poles, north (e.g. -85) might be smaller than south (e.g. 85).
-		// In these cases, the terms north/south & east/west become rather arbitrary of course.
-		// see also https://antimeridian.readthedocs.io/en/stable/
-		// todo: how does HAFAS handle this?
-		if (north === south) {
-			throw new Error('bbox.north must not be equal to bbox.south.');
-		}
-		if (east === west) {
-			throw new Error('bbox.east must not be equal to bbox.west.');
-		}
-
-		opt = Object.assign({
-			results: 256, // maximum number of vehicles
-			duration: 30, // compute frames for the next n seconds
-			// todo: what happens with `frames: 0`?
-			frames: 3, // nr of frames to compute
-			products: null, // optionally an object of booleans
-			polylines: true, // return a track shape for each vehicle?
-			subStops: true, // parse & expose sub-stops of stations?
-			entrances: true, // parse & expose entrances of stops/stations?
-		}, opt || {});
-		opt.when = new Date(opt.when || Date.now());
-		if (Number.isNaN(Number(opt.when))) {
-			throw new TypeError('opt.when is invalid');
-		}
-
-		const req = profile.formatRadarReq({profile, opt}, north, west, south, east);
-
-		const {res, common} = await profile.request({profile, opt}, userAgent, req);
-		if (!Array.isArray(res.jnyL)) {
-			return [];
-		}
-		const ctx = {profile, opt, common, res};
-
-		const movements = res.jnyL.map(m => profile.parseMovement(ctx, m));
-
-		return {
-			movements,
-			realtimeDataUpdatedAt: null,
-		};
-	};
-
 	const reachableFrom = async (address, opt = {}) => {
 		validateLocation(address, 'address');
 
@@ -556,7 +500,8 @@ const createClient = (profile, userAgent, opt = {}) => {
 	if (profile.tripsByName) {
 		client.tripsByName = tripsByName;
 	}
-	/*if (profile.radar) {
+
+	/* if (profile.radar) {
 		client.radar = radar;
 	}*/
 	if (profile.reachableFrom) {

@@ -262,9 +262,7 @@ if (!process.env.VCR_MODE) {
 	});
 }
 
-tap.skip('refreshJourney', async (t) => {
-	const T_MOCK = 1710831600 * 1000; // 2024-03-19T08:00:00+01:00
-	const when = createWhen(tProfile.timezone, tProfile.locale, T_MOCK);
+tap.test('refreshJourney', async (t) => {
 	const validate = createValidate({...cfg, when});
 
 	await testRefreshJourney({

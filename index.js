@@ -1,5 +1,5 @@
 import distance from 'gps-distance';
-import {stoptimes, geocode, plan, oneToAll} from '@motis-project/motis-client';
+import {stoptimes, geocode, plan, oneToAll, refreshItinerary} from '@motis-project/motis-client';
 import {defaultProfile} from './lib/default-profile.js';
 import {validateProfile} from './lib/validate-profile.js';
 
@@ -274,11 +274,16 @@ const createClient = (profile, userAgent, opt = {}) => {
 
 		const req = profile.formatRefreshJourneyReq({profile, opt}, refreshToken);
 
-		const {res} = await profile.request({profile, opt}, userAgent, req);
+		const res = await refreshItinerary({
+			throwOnError: true,
+			baseUrl: profile.baseUrl,
+			headers,
+			query: req.query,
+		});
 		const ctx = {profile, opt, common, res};
 
 		return {
-			journey: profile.parseJourney(ctx, res.verbindungen && res.verbindungen[0] || res),
+			journey: profile.parseJourney(ctx, res.data),
 			realtimeDataUpdatedAt: null, // TODO
 		};
 	};

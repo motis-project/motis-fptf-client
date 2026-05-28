@@ -30,7 +30,12 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 };
 
 const formatRefreshJourneyReq = (ctx, refreshToken) => {
-	throw new Error('NotImplemented');
+	const query = {
+		itineraryId: refreshToken,
+	};
+	return {
+		query,
+	};
 };
 
 export {

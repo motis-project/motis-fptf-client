@@ -13,7 +13,7 @@ const parseJourney = (ctx, j) => { // j = raw journey
 	const res = {
 		type: 'journey',
 		legs,
-		refreshToken: null,
+		refreshToken: j.id,
 	};
 
 	if (opt.remarks) {

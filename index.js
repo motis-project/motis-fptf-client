@@ -1,5 +1,5 @@
 import distance from 'gps-distance';
-import {stoptimes, geocode, plan, oneToAll, refreshItinerary} from '@motis-project/motis-client';
+import {stoptimes, geocode, plan, oneToAll, refreshItinerary, trip as motisTrip} from '@motis-project/motis-client';
 import {defaultProfile} from './lib/default-profile.js';
 import {validateProfile} from './lib/validate-profile.js';
 
@@ -390,21 +390,17 @@ const createClient = (profile, userAgent, opt = {}) => {
 		if (!isNonEmptyString(id)) {
 			throw new TypeError('id must be a non-empty string.');
 		}
-		opt = Object.assign({
-			stopovers: true, // return stations on the way?
-			polyline: false, // return a track shape?
-			subStops: true, // parse & expose sub-stops of stations?
-			entrances: true, // parse & expose entrances of stops/stations?
-			remarks: true, // parse & expose hints & warnings?
-			scheduledDays: false, // parse & expose dates trip is valid on?
-		}, opt);
 
 		const req = profile.formatTripReq({profile, opt}, id);
 
-		const {res} = await profile.request({profile, opt}, userAgent, req);
+		const res = await motisTrip({
+			throwOnError: true,
+			baseUrl: profile.baseUrl,
+			headers,
+			query: req.query,
+		});
 		const ctx = {profile, opt, common, res};
-
-		const trip = profile.parseTrip(ctx, res, id);
+		const trip = profile.parseTrip(ctx, res.data, id);
 
 		return {
 			trip,

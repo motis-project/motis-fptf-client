@@ -11,16 +11,16 @@ This project exists to ease transitioning from HAFAS-based APIs to open APIs run
 This is an early version. The following [FPTF](https://github.com/public-transport/friendly-public-transport-format)/[hafas-client](https://github.com/public-transport/hafas-client/) endpoints are supported:
 
 * `journeys()`
+* `refreshJourney()`
 * `locations()`,
 * `departures()`, `arrivals()` boards
 * `reachableFrom()`
 * `stop()`
+* `trip()`
 
 What doesn't work (yet):
 
-* `refreshJourney()`
 * `nearby()`
-* `trip()`
 * all other endpoints (`tripsByName()`, `radar()`, `journeysFromTrip()`, `remarks()`, `lines()`, `station()`)
 
 By default, a [transitous](https://transitous.org) profile is included, but you can use it with any other MOTIS instance by setting the `MOTIS_BASE_URL` environment variable or modifying the profile. There is also a `compat` profile which will try to merge stops (which are often platforms in GTFS) to stations similar to the stations known from `db-vendo-client`/`hafas-client`, by replacing their ID with that of their parent station. In addition, just as the `transitous` profile, when `enrichStations` is enabled (default), the `station` attribute of stops will contain the matching station data from [db-hafas-stations](https://github.com/derhuerst/db-hafas-stations) including the EVA number as id, if available. This enables matching to other DB data.
@@ -44,7 +44,7 @@ docker run \
     ghcr.io/public-transport/motis-fptf-client
 ```
 
-There are [community-maintained TypeScript typings available as `@types/hafas-client`](https://www.npmjs.com/package/@types/hafas-client). 
+There are [community-maintained TypeScript typings available as `@types/hafas-client`](https://www.npmjs.com/package/@types/hafas-client).
 
 ## Browser usage
 

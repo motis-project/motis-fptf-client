@@ -248,8 +248,8 @@ const createClient = (profile, userAgent, opt = {}) => {
 		}
 
 		return {
-			earlierRef: res.previousPageCursor,
-			laterRef: res.nextPageCursor,
+			earlierRef: res.data.previousPageCursor,
+			laterRef: res.data.nextPageCursor,
 			journeys,
 			realtimeDataUpdatedAt: null, // TODO
 		};

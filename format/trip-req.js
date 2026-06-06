@@ -1,6 +1,13 @@
 
 const formatTripReq = ({profile, opt}, id) => {
-	throw new Error('NotImplemented');
+	const query = {
+		tripId: id,
+		detailedLegs: opt.polyline,
+	};
+
+	return {
+		query,
+	};
 };
 
 export {

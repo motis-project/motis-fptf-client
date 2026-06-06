@@ -387,6 +387,10 @@ const createClient = (profile, userAgent, opt = {}) => {
 	const trip = async (id, opt = {}) => {
 		await applyEnrichedStationData({profile, common}, shouldLoadEnrichedStationData);
 
+		if (opt._id) {
+			id = opt._id;
+		}
+
 		if (!isNonEmptyString(id)) {
 			throw new TypeError('id must be a non-empty string.');
 		}

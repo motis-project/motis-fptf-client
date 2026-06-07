@@ -14,7 +14,7 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 		time: when.toISOString(),
 		maxTransfers: opt.transfers == -1 ? undefined : opt.transfers,
 		minTransferTime: opt.transferTime || undefined,
-		detailedTransfers: false,
+		detailedLegs: opt.polyline,
 		transitModes: filters.join(','),
 		numItineraries: opt.results,
 		pageCursor: journeysRef,
@@ -30,7 +30,10 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 };
 
 const formatRefreshJourneyReq = (ctx, refreshToken) => {
+	const {opt} = ctx;
+
 	const query = {
+		detailedLegs: opt.polyline,
 		itineraryId: refreshToken,
 	};
 	return {

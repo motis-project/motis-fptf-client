@@ -55,7 +55,7 @@ const parseJourneyLeg = (ctx, pt, date) => { // pt = raw leg
 		}
 
 		if (opt.stopovers && pt.intermediateStops && pt.intermediateStops.length) {
-			res.stopovers = pt.intermediateStops.map(s => profile.parseStopover(ctx, s, date));
+			res.stopovers = pt.intermediateStops.map(s => profile.parseStopover(ctx, s, date, pt.realTime));
 			// filter stations the train passes without stopping, as this doesn't comply with fptf (yet)
 			res.stopovers = res.stopovers.filter((x) => !x.passBy);
 		}

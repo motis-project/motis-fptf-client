@@ -1,4 +1,4 @@
-const parseStopover = (ctx, st, date) => { // st = raw stopover
+const parseStopover = (ctx, st, date, realTime) => { // st = raw stopover
 	const {profile, opt} = ctx;
 
 	const cancelled = profile.parseCancelled(st);
@@ -6,14 +6,14 @@ const parseStopover = (ctx, st, date) => { // st = raw stopover
 		ctx,
 		null,
 		st.scheduledArrival,
-		st.realTime ? st.arrival : null,
+		realTime ? st.arrival : null,
 		cancelled);
 	const arrPl = profile.parsePlatform(ctx, st.scheduledTrack, st.track, cancelled);
 	const dep = profile.parseWhen(
 		ctx,
 		null,
 		st.scheduledDeparture,
-		st.realTime ? st.departure : null,
+		realTime ? st.departure : null,
 		cancelled);
 	const depPl = arrPl;
 

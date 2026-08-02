@@ -22,6 +22,7 @@ const formatJourneysReq = (ctx, from, to, when, outFrwd, journeysRef) => {
 		requireBikeTransport: opt.bike,
 		// walkingSpeed
 		pedestrianProfile: opt.accessibility == 'none' ? 'FOOT' : 'WHEELCHAIR',
+		noCompulsoryReservation: opt.noCompulsoryReservation,
 	};
 	// TODO opt.notOnlyFastRoutes
 	return {

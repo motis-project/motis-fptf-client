@@ -62,6 +62,9 @@ const parseJourneyLeg = (ctx, pt, date) => { // pt = raw leg
 		if (opt.remarks) {
 			res.remarks = profile.parseRemarks(ctx, pt);
 		}
+		if (pt.reservation == 'COMPULSORY') {
+			res.compulsoryReservation = true;
+		}
 
 		// TODO cycle, alternatives
 	}

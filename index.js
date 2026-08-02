@@ -206,6 +206,7 @@ const createClient = (profile, userAgent, opt = {}) => {
 			bestprice: false, // search for lowest prices across the entire day
 			deutschlandTicketDiscount: false,
 			deutschlandTicketConnectionsOnly: false,
+			noCompulsoryReservation: false,
 		}, opt);
 
 		if (opt.when !== undefined) {

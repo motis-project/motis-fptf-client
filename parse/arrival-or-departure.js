@@ -39,6 +39,10 @@ const createParseArrOrDep = (prefix) => {
 			res.remarks = profile.parseRemarks(ctx, d, prefix == ARRIVAL);
 		}
 
+		if (d.reservation == 'COMPULSORY') {
+			res.compulsoryReservation = true;
+		}
+
 		// TODO stopovers
 		return res;
 	};

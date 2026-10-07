@@ -21,6 +21,10 @@ const parseLocation = (ctx, l) => {
 				location: res,
 			};
 		}
+		const address = parseLocationAreas(l);
+		if (address) {
+			res.address = address;
+		}
 		return ctx.profile.enrichStation(ctx, s);
 	}
 	res.name = l.name;

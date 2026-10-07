@@ -27,9 +27,8 @@ const parseLocation = (ctx, l) => {
 	if (l.type == 'PLACE') {
 		res.poi = true;
 	}
-	if (l.type == 'ADDRESS') {
-		res.address = l.name; // TODO zip etc ?
-	}
+	res.address = parseLocationAreas(l);
+	// TODO zip etc ?
 	return res;
 };
 
@@ -51,6 +50,34 @@ const enrichStation = (ctx, stop, locations) => {
 		}
 	}
 	return stop;
+};
+
+// stolen from https://github.com/motis-project/motis/blob/29d8a61ae5e8f549e3bbb2fca930461ea8fd1b4f/ui/src/lib/AddressTypeahead.svelte#L35
+const parseLocationAreas = (l) => {
+	if ((l.areas?.length ?? 0) === 0) {
+		return undefined;
+	}
+	const matchedArea = l.areas.find((a) => a.matched);
+	const defaultArea = l.areas.find((a) => a.default);
+	if (matchedArea?.name.match(/^[0-9]*$/)) {
+		matchedArea.name += ' ' + defaultArea?.name;
+	}
+
+	const areas = new Set();
+
+	l.areas.forEach((a, i) => {
+		if (a.matched || a.unique || a.default || a.adminLevel === 2 || a.adminLevel === 4) {
+			if (a.name !== l.name) {
+				areas.add(i);
+			}
+		}
+	});
+
+	const sorted = Array.from(areas);
+	sorted.sort((a, b) => b - a);
+
+	return sorted.map((a) => l.areas[a].name)
+		.join(', ');
 };
 
 export {
